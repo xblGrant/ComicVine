@@ -5,18 +5,18 @@
     <item
         android:id="@+id/signoutMenuButton"
         android:title="@string/signoutMenuButton"
-        android:orderInCategory="100"
+        android:orderInCategory="300"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/searchMenuButton"
         android:title="@string/searchMenuButton"
-        android:orderInCategory="200"
+        android:orderInCategory="100"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/favoritesMenuButton"
         android:title="@string/favoritesMenuButton"
-        android:orderInCategory="300"
+        android:orderInCategory="200"
         app:showAsAction="ifRoom"/>
 </menu>
