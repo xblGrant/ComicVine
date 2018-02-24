@@ -12,8 +12,8 @@ public class SearchScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_screen);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.search_screen_toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.search_screen_toolbar);
+        //setSupportActionBar(toolbar);
 
     }
 
