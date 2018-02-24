@@ -8,4 +8,6 @@
     <string name="signoutMenuButton">Sign Out</string>
     <string name="searchMenuButton">Search</string>
     <string name="favoritesMenuButton">Favorites</string>
+    <string name="Search">Search</string>
+    <string name="SearchEditText">ex: \"Superman\"</string>
 </resources>
