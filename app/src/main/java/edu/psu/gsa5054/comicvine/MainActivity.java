@@ -18,8 +18,8 @@ public class MainActivity extends AppCompatActivity {
         skipLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(MainActivity.this, SearchScreen.class));
+                Toast.makeText(MainActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
             }
         });
     }
