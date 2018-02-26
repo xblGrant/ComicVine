@@ -14,15 +14,17 @@ import android.support.v7.app.AlertDialog;
 
 public class clearFavoritesDialog extends DialogFragment {
 
+    //interface of clearFavoritesDialog
     public interface clearFavoritesDialogListener {
         public void onPositiveClick();
     }
 
-    clearFavoritesDialogListener listener;
+    private clearFavoritesDialogListener listener;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstaceState) {
 
+        //this subclasses the AlertDialog Class by using a static Builder method in AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle("Clear All Favorites?")

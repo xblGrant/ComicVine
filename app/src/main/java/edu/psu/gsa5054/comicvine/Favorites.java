@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+//this activity implements clearFavoritesDialogListener
 public class Favorites extends AppCompatActivity implements clearFavoritesDialog.clearFavoritesDialogListener {
 
     @Override
@@ -54,11 +55,14 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
 
     //this is called when user selects "Erase Favorites" option in appBar
     public void eraseFavorites(){
+        //this creates the new dialog
         DialogFragment dialogFragment = new clearFavoritesDialog();
+        //this causes the dialog to be shown to user
         dialogFragment.show(getFragmentManager(), "clearFavorites");
     }
 
     //TODO: this should make the current favorites be erased
+    //this is from the clearFavoritesDialogListener interface
     public void onPositiveClick(){
         Toast.makeText(this, "Not Yet Implemented", Toast.LENGTH_LONG).show();
     }
