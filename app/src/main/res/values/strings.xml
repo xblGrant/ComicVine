@@ -11,4 +11,5 @@
     <string name="Search">Search</string>
     <string name="SearchEditText">ex: \"Superman\"</string>
     <string name="eraseFavorites">Erase Favorites</string>
+    <string name="addFavorite">Add To Favorites</string>
 </resources>

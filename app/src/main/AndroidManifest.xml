@@ -16,18 +16,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".SearchScreen"
-            android:parentActivityName=".MainActivity">
-
-        </activity>
+            android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".Favorites"
-            android:parentActivityName=".SearchScreen">
-
-        </activity>
+            android:parentActivityName=".SearchScreen"></activity>
+        <activity android:name=".SelectedItem"></activity>
     </application>
 
 </manifest>
