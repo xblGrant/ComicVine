@@ -1,6 +1,7 @@
 package edu.psu.gsa5054.comicvine;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    private long rowid;
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +26,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        FavoriteDB.getInstance(this).asyncWritableDatabase(new FavoriteDB.onDBReadyListener() {
+            @Override
+            public void onDBReady(SQLiteDatabase faveDB) {
+                db = faveDB;
+//                dbAsyncLoadCursor(false);
+            }
+        });
+
     }
 }
