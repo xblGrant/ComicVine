@@ -98,16 +98,16 @@ public class FavoriteDB extends SQLiteOpenHelper {
         // No information to populate tables
         // Not fully connected to ComicVine API yet
 
-//        db.beginTransaction();
-//        ContentValues values = new ContentValues();
+        db.beginTransaction();
+        ContentValues values = new ContentValues();
 //        ...
-//        values.put("id", /*integer value*/);
-//        values.put("name", /*string value*/);
+        values.put("id", 1/*integer value*/);
+        values.put("name", "test"/*string value*/);
 //        ...
-//        db.insert(/*table name*/, null, values);
+        db.insert(/*table name*/"character", null, values);
 //        ...
-//        db.setTransactionSuccessful();
-//        db.endTransaction();
+        db.setTransactionSuccessful();
+        db.endTransaction();
 
     }
 
