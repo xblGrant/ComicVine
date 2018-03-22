@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ComicVine.iml" filepath="$PROJECT_DIR$/ComicVine.iml" />
-      <module fileurl="file://E:\Documents\GitHub\ComicVine\ComicVine.iml" filepath="E:\Documents\GitHub\ComicVine\ComicVine.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://E:\Documents\GitHub\ComicVine\app\app.iml" filepath="E:\Documents\GitHub\ComicVine\app\app.iml" />
     </modules>
   </component>
 </project>

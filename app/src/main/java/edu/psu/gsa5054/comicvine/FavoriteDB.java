@@ -17,40 +17,42 @@ public class FavoriteDB extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_PUBLISHER =
             "CREATE TABLE publisher ( " +
-                    "id INTEGER PRIMARY KEY," +
+                    "id INTEGER PRIMARY KEY, " +
                     "name TEXT)";
     private static final String SQL_CREATE_CHARACTER =
             "CREATE TABLE character ( " +
-                    "id INTEGER PRIMARY KEY," +
-                    "name TEXT," +
-                    "publisher INTEGER FOREIGN KEY)";
+                    "id INTEGER PRIMARY KEY, " +
+                    "name TEXT, " +
+                    "publisher INTEGER, " +
+                    "FOREIGN KEY (publisher) REFERENCES publisher(id))";
     private static final String SQL_CREATE_EPISODE =
             "CREATE TABLE episode ( " +
-                    "id INTEGER PRIMARY KEY," +
-                    "name TEXT," +
-                    "series TEXT," +
+                    "id INTEGER PRIMARY KEY, " +
+                    "name TEXT, " +
+                    "series TEXT, " +
                     "episode_number TEXT)";
     private static final String SQL_CREATE_ISSUE =
             "CREATE TABLE issue ( " +
-                    "id INTEGER PRIMARY KEY," +
+                    "id INTEGER PRIMARY KEY, " +
                     "name TEXT)";
     private static final String SQL_CREATE_MOVIE =
             "CREATE TABLE movie ( " +
-                    "id INTEGER PRIMARY KEY," +
+                    "id INTEGER PRIMARY KEY, " +
                     "name TEXT)";
     private static final String SQL_CREATE_SERIES =
             "CREATE TABLE series ( " +
-                    "id INTEGER PRIMARY KEY," +
+                    "id INTEGER PRIMARY KEY, " +
                     "name TEXT)";
     private static final String SQL_CREATE_TEAM =
             "CREATE TABLE team ( " +
-                    "id INTEGER PRIMARY KEY," +
+                    "id INTEGER PRIMARY KEY, " +
                     "name TEXT)";
     private static final String SQL_CREATE_VOLUME =
             "CREATE TABLE team ( " +
-                    "id INTEGER PRIMARY KEY," +
-                    "name TEXT" +
-                    "publisher INTEGER FOREIGN KEY)";
+                    "id INTEGER PRIMARY KEY, " +
+                    "name TEXT, " +
+                    "publisher INTEGER, " +
+                    "FOREIGN KEY (publisher) REFERENCES publisher(id))";
 
     private static final String SQL_DELETE_PUBLISHER =
             "DROP TABLE IF EXISTS publisher";
@@ -87,16 +89,16 @@ public class FavoriteDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_PUBLISHER);
-        db.execSQL(SQL_CREATE_CHARACTER);
-        db.execSQL(SQL_CREATE_EPISODE);
-        db.execSQL(SQL_CREATE_ISSUE);
-        db.execSQL(SQL_CREATE_MOVIE);
-        db.execSQL(SQL_CREATE_SERIES);
-        db.execSQL(SQL_CREATE_TEAM);
-        db.execSQL(SQL_CREATE_VOLUME);
+        // db.execSQL(SQL_CREATE_CHARACTER);
+        // db.execSQL(SQL_CREATE_EPISODE);
+        // db.execSQL(SQL_CREATE_ISSUE);
+        // db.execSQL(SQL_CREATE_MOVIE);
+        // db.execSQL(SQL_CREATE_SERIES);
+        // db.execSQL(SQL_CREATE_TEAM);
+        // db.execSQL(SQL_CREATE_VOLUME);
 
         // No information to populate tables
-        // Not fully connected to ComicVine API yet
+        // TODO: Not fully connected to ComicVine API yet
 
         db.beginTransaction();
         ContentValues values = new ContentValues();
@@ -104,7 +106,7 @@ public class FavoriteDB extends SQLiteOpenHelper {
         values.put("id", 1/*integer value*/);
         values.put("name", "test"/*string value*/);
 //        ...
-        db.insert(/*table name*/"character", null, values);
+        db.insert(/*table name*/"publisher", null, values);
 //        ...
         db.setTransactionSuccessful();
         db.endTransaction();
@@ -114,13 +116,13 @@ public class FavoriteDB extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(SQL_DELETE_PUBLISHER);
-        db.execSQL(SQL_DELETE_CHARACTER);
-        db.execSQL(SQL_DELETE_EPISODE);
-        db.execSQL(SQL_DELETE_ISSUE);
-        db.execSQL(SQL_DELETE_MOVIE);
-        db.execSQL(SQL_DELETE_SERIES);
-        db.execSQL(SQL_DELETE_TEAM);
-        db.execSQL(SQL_DELETE_VOLUME);
+        // db.execSQL(SQL_DELETE_CHARACTER);
+//        db.execSQL(SQL_DELETE_EPISODE);
+//        db.execSQL(SQL_DELETE_ISSUE);
+//        db.execSQL(SQL_DELETE_MOVIE);
+//        db.execSQL(SQL_DELETE_SERIES);
+//        db.execSQL(SQL_DELETE_TEAM);
+//        db.execSQL(SQL_DELETE_VOLUME);
         onCreate(db);
     }
 
