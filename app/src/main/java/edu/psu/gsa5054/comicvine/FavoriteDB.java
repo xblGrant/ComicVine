@@ -12,7 +12,7 @@ public class FavoriteDB extends SQLiteOpenHelper {
         void onDBReady(SQLiteDatabase faveDB);
     }
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "fave.db";
 
     private static final String SQL_CREATE_PUBLISHER =
