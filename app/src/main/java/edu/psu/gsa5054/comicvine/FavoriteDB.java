@@ -12,12 +12,12 @@ public class FavoriteDB extends SQLiteOpenHelper {
         void onDBReady(SQLiteDatabase faveDB);
     }
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "fave.db";
 
     private static final String SQL_CREATE_PUBLISHER =
             "CREATE TABLE publisher ( " +
-                    "_id INTEGER PRIMARY KEY, " +
+                    "_id INTEGER  PRIMARY KEY AUTOINCREMENT, " +
                     "name TEXT)";
     private static final String SQL_CREATE_CHARACTER =
             "CREATE TABLE character ( " +
@@ -103,7 +103,6 @@ public class FavoriteDB extends SQLiteOpenHelper {
         db.beginTransaction();
         ContentValues values = new ContentValues();
 //        ...
-        values.put("_id", 1/*integer value*/);
         values.put("name", "test"/*string value*/);
 //        ...
         db.insert(/*table name*/"publisher", null, values);

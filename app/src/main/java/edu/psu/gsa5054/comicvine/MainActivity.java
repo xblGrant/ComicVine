@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
@@ -42,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
               dbAsyncLoadCursor(false);
             }
         });
-
-
     }
+
+    //END onCREATE ***************************************************************************
 
     //initialize the adapter that is bound to the TextView
     private void onCreateMainTextAdapter(){
@@ -54,10 +55,16 @@ public class MainActivity extends AppCompatActivity {
                 new int[]{R.id.databaseTestTextView}, 0);
 
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
-            @Override
-            public boolean setViewValue(View view, Cursor cursor, int i) {
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 TextView mainActivityTextView = (TextView) findViewById(R.id.databaseTestTextView);
-                mainActivityTextView.setText(cursor.getString(cursor.getColumnIndexOrThrow("name")));
+                //should set the textView to "test"
+
+                if(cursor.moveToFirst()) {
+                    String test = cursor.getString(cursor.getColumnIndex("name"));
+                    Log.i("testing Database", test);
+                    mainActivityTextView.setText(cursor.getString(cursor.getColumnIndex("name")));
+                }
+                cursor.close();
                 return true;
             }
         });
