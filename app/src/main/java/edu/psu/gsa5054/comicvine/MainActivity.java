@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             protected Cursor doInBackground(Boolean... params){
                 scrollToEnd = params[0];
                 String where = null;
-                String[] projection = {"name"};
+                String[] projection = {"_id", "name"};
                 return db.query("publisher", projection, where, null, null, null, null);
 
             }

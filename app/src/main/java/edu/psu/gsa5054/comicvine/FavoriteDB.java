@@ -17,39 +17,39 @@ public class FavoriteDB extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_PUBLISHER =
             "CREATE TABLE publisher ( " +
-                    "id INTEGER PRIMARY KEY, " +
+                    "_id INTEGER PRIMARY KEY, " +
                     "name TEXT)";
     private static final String SQL_CREATE_CHARACTER =
             "CREATE TABLE character ( " +
-                    "id INTEGER PRIMARY KEY, " +
+                    "_id INTEGER PRIMARY KEY, " +
                     "name TEXT, " +
                     "publisher INTEGER, " +
                     "FOREIGN KEY (publisher) REFERENCES publisher(id))";
     private static final String SQL_CREATE_EPISODE =
             "CREATE TABLE episode ( " +
-                    "id INTEGER PRIMARY KEY, " +
+                    "_id INTEGER PRIMARY KEY, " +
                     "name TEXT, " +
                     "series TEXT, " +
                     "episode_number TEXT)";
     private static final String SQL_CREATE_ISSUE =
             "CREATE TABLE issue ( " +
-                    "id INTEGER PRIMARY KEY, " +
+                    "_id INTEGER PRIMARY KEY, " +
                     "name TEXT)";
     private static final String SQL_CREATE_MOVIE =
             "CREATE TABLE movie ( " +
-                    "id INTEGER PRIMARY KEY, " +
+                    "_id INTEGER PRIMARY KEY, " +
                     "name TEXT)";
     private static final String SQL_CREATE_SERIES =
             "CREATE TABLE series ( " +
-                    "id INTEGER PRIMARY KEY, " +
+                    "_id INTEGER PRIMARY KEY, " +
                     "name TEXT)";
     private static final String SQL_CREATE_TEAM =
             "CREATE TABLE team ( " +
-                    "id INTEGER PRIMARY KEY, " +
+                    "_id INTEGER PRIMARY KEY, " +
                     "name TEXT)";
     private static final String SQL_CREATE_VOLUME =
             "CREATE TABLE team ( " +
-                    "id INTEGER PRIMARY KEY, " +
+                    "_id INTEGER PRIMARY KEY, " +
                     "name TEXT, " +
                     "publisher INTEGER, " +
                     "FOREIGN KEY (publisher) REFERENCES publisher(id))";
@@ -103,7 +103,7 @@ public class FavoriteDB extends SQLiteOpenHelper {
         db.beginTransaction();
         ContentValues values = new ContentValues();
 //        ...
-        values.put("id", 1/*integer value*/);
+        values.put("_id", 1/*integer value*/);
         values.put("name", "test"/*string value*/);
 //        ...
         db.insert(/*table name*/"publisher", null, values);
