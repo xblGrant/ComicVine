@@ -34,21 +34,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        onCreateMainTextAdapter();
-
         FavoriteDB.getInstance(this).asyncWritableDatabase(new FavoriteDB.onDBReadyListener() {
             @Override
             public void onDBReady(SQLiteDatabase faveDB) {
                 db = faveDB;
-              dbAsyncLoadCursor(false);
+                dbAsyncLoadCursor(false);
             }
         });
+
+        onCreateMainTextAdapter();
     }
 
     //END onCREATE ***************************************************************************
 
     //initialize the adapter that is bound to the TextView
-    private void onCreateMainTextAdapter(){
+    private void onCreateMainTextAdapter() {
         //initially set to null. it is not ready
         adapter = new SimpleCursorAdapter(this, R.layout.activity_main, null,
                 new String[]{"name"},
@@ -59,11 +59,10 @@ public class MainActivity extends AppCompatActivity {
                 TextView mainActivityTextView = (TextView) findViewById(R.id.databaseTestTextView);
                 //should set the textView to "test"
 
-                if(cursor.moveToFirst()) {
-                    String test = cursor.getString(cursor.getColumnIndex("name"));
-                    Log.i("testing Database", test);
-                    mainActivityTextView.setText(cursor.getString(cursor.getColumnIndex("name")));
-                }
+                String test = cursor.getString(cursor.getColumnIndex("name"));
+                Log.i("testing Database", test);
+                mainActivityTextView.setText(cursor.getString(cursor.getColumnIndex("name")));
+
                 cursor.close();
                 return true;
             }
@@ -73,26 +72,23 @@ public class MainActivity extends AppCompatActivity {
     //don't know if this is nessecary for just doing db.query and setting
     //a cursor to the result.
     @SuppressLint("StaticFieldLeak")
-    private void dbAsyncLoadCursor(boolean scrollToEnd){
+    private void dbAsyncLoadCursor(boolean scrollToEnd) {
 
-        new AsyncTask<Boolean, Void, Cursor>(){
+        new AsyncTask<Boolean, Void, Cursor>() {
             boolean scrollToEnd;
+
             @Override
-            protected Cursor doInBackground(Boolean... params){
+            protected Cursor doInBackground(Boolean... params) {
                 scrollToEnd = params[0];
                 String where = null;
                 String[] projection = {"_id", "name"};
                 return db.query("publisher", projection, where, null, null, null, null);
-
             }
 
             @Override
-            protected void onPostExecute(Cursor cursor){
+            protected void onPostExecute(Cursor cursor) {
                 adapter.swapCursor(cursor);
             }
         }.execute(scrollToEnd);
     }
-
-
-
 }
