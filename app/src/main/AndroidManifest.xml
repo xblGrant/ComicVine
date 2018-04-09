@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.psu.gsa5054.comicvine">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:background="@color/White"
@@ -19,11 +21,11 @@
         </activity>
         <activity
             android:name=".SearchScreen"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".Favorites"
-            android:parentActivityName=".SearchScreen"></activity>
-        <activity android:name=".SelectedItem"></activity>
+            android:parentActivityName=".SearchScreen" />
+        <activity android:name=".SelectedItem"/>
     </application>
 
 </manifest>
