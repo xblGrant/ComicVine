@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "314094365397",
+    "firebase_url": "https://comicvine-85c9b.firebaseio.com",
+    "project_id": "comicvine-85c9b",
+    "storage_bucket": "comicvine-85c9b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314094365397:android:e36b3d3ad414cff9",
+        "android_client_info": {
+          "package_name": "edu.psu.gsa5054.comicvine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "314094365397-29vaf2cmj8kjg5sl0lnrar4neojlkdpp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCojrB4r2sANEhXq2gPhsywBYjDED_OMug"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
