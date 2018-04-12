@@ -1,9 +1,12 @@
 package edu.psu.gsa5054.comicvine;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +16,8 @@ import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +48,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         onCreateMainTextAdapter();
+
+        if (!isNetworkConnected()) {
+            new AlertDialog.Builder(this)
+                    .setTitle("No Internet Connection")
+                    .setMessage("Please connect to the internet and try again")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            System.exit(0);
+                        }
+                    }).setIcon(android.R.drawable.ic_dialog_alert).show();
+        }
     }
 
     //END onCREATE ***************************************************************************
@@ -90,5 +106,12 @@ public class MainActivity extends AppCompatActivity {
                 adapter.swapCursor(cursor);
             }
         }.execute(scrollToEnd);
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
     }
 }
