@@ -12,64 +12,24 @@ public class FavoriteDB extends SQLiteOpenHelper {
         void onDBReady(SQLiteDatabase faveDB);
     }
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "fave.db";
 
-    private static final String SQL_CREATE_PUBLISHER =
-            "CREATE TABLE publisher ( " +
+    private static final String SQL_CREATE_USER =
+            "CREATE TABLE user ( " +
                     "_id INTEGER  PRIMARY KEY AUTOINCREMENT, " +
-                    "name TEXT)";
-    private static final String SQL_CREATE_CHARACTER =
-            "CREATE TABLE character ( " +
-                    "_id INTEGER PRIMARY KEY, " +
-                    "name TEXT, " +
-                    "publisher INTEGER, " +
-                    "FOREIGN KEY (publisher) REFERENCES publisher(id))";
-    private static final String SQL_CREATE_EPISODE =
-            "CREATE TABLE episode ( " +
-                    "_id INTEGER PRIMARY KEY, " +
-                    "name TEXT, " +
-                    "series TEXT, " +
-                    "episode_number TEXT)";
-    private static final String SQL_CREATE_ISSUE =
-            "CREATE TABLE issue ( " +
-                    "_id INTEGER PRIMARY KEY, " +
-                    "name TEXT)";
-    private static final String SQL_CREATE_MOVIE =
-            "CREATE TABLE movie ( " +
-                    "_id INTEGER PRIMARY KEY, " +
-                    "name TEXT)";
-    private static final String SQL_CREATE_SERIES =
-            "CREATE TABLE series ( " +
-                    "_id INTEGER PRIMARY KEY, " +
-                    "name TEXT)";
-    private static final String SQL_CREATE_TEAM =
-            "CREATE TABLE team ( " +
-                    "_id INTEGER PRIMARY KEY, " +
-                    "name TEXT)";
-    private static final String SQL_CREATE_VOLUME =
-            "CREATE TABLE team ( " +
-                    "_id INTEGER PRIMARY KEY, " +
-                    "name TEXT, " +
-                    "publisher INTEGER, " +
-                    "FOREIGN KEY (publisher) REFERENCES publisher(id))";
+                    "UID TEXT)";
 
-    private static final String SQL_DELETE_PUBLISHER =
-            "DROP TABLE IF EXISTS publisher";
-    private static final String SQL_DELETE_CHARACTER =
-            "DROP TABLE IF EXISTS character";
-    private static final String SQL_DELETE_EPISODE =
-            "DROP TABLE IF EXISTS episode";
-    private static final String SQL_DELETE_ISSUE =
-            "DROP TABLE IF EXISTS issue";
-    private static final String SQL_DELETE_MOVIE =
-            "DROP TABLE IF EXISTS movie";
-    private static final String SQL_DELETE_SERIES =
-            "DROP TABLE IF EXISTS series";
-    private static final String SQL_DELETE_TEAM =
-            "DROP TABLE IF EXISTS team";
-    private static final String SQL_DELETE_VOLUME =
-            "DROP TABLE IF EXISTS volume";
+    private static final String SQL_CREATE_FAVORITE =
+            "CREATE TABLE FAVORITE ( " +
+                    "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "CharacterID TEXT)";
+
+
+    private static final String SQL_DELETE_USER =
+            "DROP TABLE IF EXISTS user";
+    private static final String SQL_DELETE_FAVORITE =
+            "DROP TABLE IF EXISTS FAVORITE";
 
     private static FavoriteDB faveDb;
     private Context appContext;
@@ -88,14 +48,8 @@ public class FavoriteDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_PUBLISHER);
-        // db.execSQL(SQL_CREATE_CHARACTER);
-        // db.execSQL(SQL_CREATE_EPISODE);
-        // db.execSQL(SQL_CREATE_ISSUE);
-        // db.execSQL(SQL_CREATE_MOVIE);
-        // db.execSQL(SQL_CREATE_SERIES);
-        // db.execSQL(SQL_CREATE_TEAM);
-        // db.execSQL(SQL_CREATE_VOLUME);
+        db.execSQL(SQL_CREATE_USER);
+        db.execSQL(SQL_CREATE_FAVORITE);
 
         // No information to populate tables
         // TODO: Not fully connected to ComicVine API yet
@@ -103,9 +57,9 @@ public class FavoriteDB extends SQLiteOpenHelper {
         db.beginTransaction();
         ContentValues values = new ContentValues();
 //        ...
-        values.put("name", "test"/*string value*/);
+        values.put("UID", "test"/*string value*/);
 //        ...
-        db.insert(/*table name*/"publisher", null, values);
+        db.insert(/*table name*/"user", null, values);
 //        ...
         db.setTransactionSuccessful();
         db.endTransaction();
@@ -114,14 +68,8 @@ public class FavoriteDB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(SQL_DELETE_PUBLISHER);
-        // db.execSQL(SQL_DELETE_CHARACTER);
-//        db.execSQL(SQL_DELETE_EPISODE);
-//        db.execSQL(SQL_DELETE_ISSUE);
-//        db.execSQL(SQL_DELETE_MOVIE);
-//        db.execSQL(SQL_DELETE_SERIES);
-//        db.execSQL(SQL_DELETE_TEAM);
-//        db.execSQL(SQL_DELETE_VOLUME);
+        db.execSQL(SQL_DELETE_USER);
+        db.execSQL(SQL_DELETE_FAVORITE);
         onCreate(db);
     }
 

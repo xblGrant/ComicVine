@@ -47,28 +47,6 @@
         app:layout_constraintTop_toBottomOf="@+id/passwordEntry" />
 
     <Button
-        android:id="@+id/googleSigninButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-        android:text="@string/googleSignin"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/googleSigninImage"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
-
-    <ImageView
-        android:id="@+id/googleSigninImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/googleSigninButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton"
-        app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal" />
-
-    <Button
         android:id="@+id/skipSigninButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -81,17 +59,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/googleSigninButton" />
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
     <TextView
         android:id="@+id/databaseTestTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/skipSigninButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/googleSigninButton" />
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
 </android.support.constraint.ConstraintLayout>

@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private void onCreateMainTextAdapter() {
         //initially set to null. it is not ready
         adapter = new SimpleCursorAdapter(this, R.layout.activity_main, null,
-                new String[]{"name"},
+                new String[]{"UID"},
                 new int[]{R.id.databaseTestTextView}, 0);
 
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
@@ -59,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
                 TextView mainActivityTextView = (TextView) findViewById(R.id.databaseTestTextView);
                 //should set the textView to "test"
 
-                String test = cursor.getString(cursor.getColumnIndex("name"));
+                String test = cursor.getString(cursor.getColumnIndex("UID"));
                 Log.i("testing Database", test);
-                mainActivityTextView.setText(cursor.getString(cursor.getColumnIndex("name")));
+                mainActivityTextView.setText(cursor.getString(cursor.getColumnIndex("UID")));
 
                 cursor.close();
                 return true;
@@ -81,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
             protected Cursor doInBackground(Boolean... params) {
                 scrollToEnd = params[0];
                 String where = null;
-                String[] projection = {"_id", "name"};
-                return db.query("publisher", projection, where, null, null, null, null);
+                String[] projection = {"_id", "UID"};
+                return db.query("USER", projection, where, null, null, null, null);
             }
 
             @Override
