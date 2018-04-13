@@ -12,18 +12,20 @@ public class FavoriteDB extends SQLiteOpenHelper {
         void onDBReady(SQLiteDatabase faveDB);
     }
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "fave.db";
 
     private static final String SQL_CREATE_USER =
             "CREATE TABLE user ( " +
-                    "_id INTEGER  PRIMARY KEY AUTOINCREMENT, " +
-                    "UID TEXT)";
+                    "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "UID TEXT UNIQUE NOT NULL)";
 
     private static final String SQL_CREATE_FAVORITE =
             "CREATE TABLE FAVORITE ( " +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "CharacterID TEXT)";
+                    "CharacterID TEXT, " +
+                    "UID TEXT, " +
+                    "Foreign Key(UID) REFERENCES user(UID))";
 
 
     private static final String SQL_DELETE_USER =
