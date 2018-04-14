@@ -14,18 +14,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JSONviaHTTP {
     private static final String TAG = "JSONViaHttp";
 
     @SuppressLint("StaticFieldLeak")
     public static void getByCharacterName(final String queryName) {
-        new AsyncTask<Void, Void, Void>() {
+        new AsyncTask<Void, Void, List<Characters>>() {
+
             @Override
-            public Void doInBackground(Void... params) {
+            public List<Characters> doInBackground(Void... params) {
 
                 String queryParam = queryName;
                 StringBuilder buffedUp = new StringBuilder();
@@ -44,6 +45,8 @@ public class JSONviaHTTP {
                 String filter = "&filter=name%3A" + queryParam + ",publisher%3Adc,marvel&format=JSON";
                 String sURL = "https://comicvine.gamespot.com/api/" + resource + apiKey + filter;
 
+                List<Characters> characters = null;
+
                 try {
                     URL url;
                     HttpURLConnection urlConnection;
@@ -58,7 +61,7 @@ public class JSONviaHTTP {
 
                     try {
                         BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                        parseResponse(in);
+                        characters = parseResponse(in);
                     } catch (IOException e) {
                         Log.e(TAG, "Error reading response from site: " + e.getMessage());
                     } catch (JSONException e) {
@@ -70,13 +73,18 @@ public class JSONviaHTTP {
                     Log.e(TAG, "Error trying to traverse que" +
                             "ry results: " + e.getMessage());
                 }
-                return null;
+                return characters;
+            }
+
+            @Override
+            public void onPostExecute(List<Characters> characters) {
+                // List View BullShit
             }
 
         }.execute();
     }
 
-    private static void parseResponse(BufferedReader in) throws IOException, JSONException {
+    private static List<Characters> parseResponse(BufferedReader in) throws IOException, JSONException {
         StringBuilder response = new StringBuilder(2048);
         String line;
         while ((line = in.readLine()) != null) {
@@ -86,14 +94,19 @@ public class JSONviaHTTP {
         JSONObject result = new JSONObject(sResponse);
         JSONArray arrayResult = result.getJSONArray("results");
 
+
+        List<Characters> queryResult = new ArrayList<>();
         for (int i = 0; i < arrayResult.length(); i++){
             String results = arrayResult.get(i).toString();
 
             Gson gson = new Gson();
             Characters characterInfo = gson.fromJson(results, Characters.class);
 
+            queryResult.add(characterInfo);
             Log.i(TAG, "" + characterInfo.getName());
         }
+
+        return queryResult;
     }
 
     private class Characters {
