@@ -19,6 +19,7 @@ import android.widget.Toast;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
+
 public class MainActivity extends AppCompatActivity {
 
     private long rowid;
@@ -30,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button skipLoginButton = (Button) findViewById(R.id.skipSigninButton);
-        skipLoginButton.setOnClickListener(new View.OnClickListener() {
+        Button signUpButton = (Button) findViewById(R.id.signUpButton);
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SearchScreen.class));
+                startActivity(new Intent(MainActivity.this, SignUp.class));
                 Toast.makeText(MainActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
             }
         });
