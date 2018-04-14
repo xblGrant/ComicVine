@@ -35,7 +35,7 @@ public class SignUp extends AppCompatActivity {
                 String password1 = ((TextView) findViewById(R.id.password1)).getText().toString();
                 String password2 = ((TextView) findViewById(R.id.password2)).getText().toString();
 
-                try{
+                if(email!= null && !email.equals("")){
                     if(password1.equals(password2)){
 
                         mAuth.createUserWithEmailAndPassword(email, password1)
@@ -48,17 +48,17 @@ public class SignUp extends AppCompatActivity {
                                             startActivity(new Intent(SignUp.this, MainActivity.class));
                                         }
                                         else{
-                                            Toast.makeText(SignUp.this, "Failed to create user account", Toast.LENGTH_SHORT);
+                                            Toast.makeText(SignUp.this, "Failed to create user account", Toast.LENGTH_SHORT).show();
                                         }
 
                                     }
                                 });
                     }
                     else{
-                        Toast.makeText(SignUp.this, "Passwords must match", Toast.LENGTH_LONG);
+                        Toast.makeText(SignUp.this, "Passwords must match", Toast.LENGTH_LONG).show();
                     }
-                }catch(NullPointerException e){
-                    Toast.makeText(SignUp.this, "A field must not be blank", Toast.LENGTH_LONG);
+                }else{
+                    Toast.makeText(SignUp.this, "Email field must not be blank", Toast.LENGTH_LONG).show();
                 }
             }
         });
