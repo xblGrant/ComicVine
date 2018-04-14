@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,17 +20,55 @@ import android.widget.Toast;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private long rowid;
     private SQLiteDatabase db;
     private SimpleCursorAdapter adapter;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAuth = FirebaseAuth.getInstance();
+
+        Button loginButton = (Button) findViewById(R.id.loginButton);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String email = ((TextView) findViewById(R.id.emailEntry)).getText().toString();
+                String password = ((TextView) findViewById(R.id.passwordEntry)).getText().toString();
+
+                if(email!= null && !email.equals("") && password!= null && !password.equals("")){
+                        mAuth.signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>(){
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task){
+                                        if(task.isSuccessful()){
+                                            String UID = mAuth.getUid();
+                                            //TODO add UID into local database.
+                                            startActivity(new Intent(MainActivity.this, SearchScreen.class));
+                                        }
+                                        else{
+                                            Toast.makeText(MainActivity.this, "Failed to create user account", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+                                });
+                    }else {
+                    Toast.makeText(MainActivity.this, "Email field must not be blank", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
         Button signUpButton = (Button) findViewById(R.id.signUpButton);
         signUpButton.setOnClickListener(new View.OnClickListener() {
