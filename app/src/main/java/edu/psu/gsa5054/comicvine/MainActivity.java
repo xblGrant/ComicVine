@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDBReady(SQLiteDatabase faveDB) {
                 db = faveDB;
                 dbAsyncLoadCursor(false);
-                onCreateMainTextAdapter();
+                //onCreateMainTextAdapter();
             }
         });
 
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         //initially set to null. it is not ready
         adapter = new SimpleCursorAdapter(this, R.layout.activity_main, null,
                 new String[]{"UID"},
-                new int[]{R.id.databaseTestTextView}, 0);
+                new int[]{}, 0);
 
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {

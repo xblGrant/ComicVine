@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ComicVine.iml" filepath="$PROJECT_DIR$/ComicVine.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/ComicVine.iml" filepath="$PROJECT_DIR$/.idea/ComicVine.iml" />
+      <module fileurl="file://C:\Users\Grant Abbondanza\Desktop\School\CMPSC 475 - Android App Programming\ComicVine\.idea\ComicVine.iml" filepath="C:\Users\Grant Abbondanza\Desktop\School\CMPSC 475 - Android App Programming\ComicVine\.idea\ComicVine.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
