@@ -45,10 +45,11 @@ public class MainActivity extends AppCompatActivity {
             public void onDBReady(SQLiteDatabase faveDB) {
                 db = faveDB;
                 dbAsyncLoadCursor(false);
+                onCreateMainTextAdapter();
             }
         });
 
-        onCreateMainTextAdapter();
+
 
         if (!isNetworkConnected()) {
             new AlertDialog.Builder(this)
@@ -75,12 +76,12 @@ public class MainActivity extends AppCompatActivity {
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 TextView mainActivityTextView = (TextView) findViewById(R.id.databaseTestTextView);
                 //should set the textView to "test"
-
                 String test = cursor.getString(cursor.getColumnIndex("UID"));
                 Log.i("testing Database", test);
+                Log.i("testing null", "random string");
                 mainActivityTextView.setText(cursor.getString(cursor.getColumnIndex("UID")));
-
                 cursor.close();
+                //possibly close db db.close()???
                 return true;
             }
         });
