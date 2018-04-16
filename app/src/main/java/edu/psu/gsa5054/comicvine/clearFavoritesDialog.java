@@ -8,10 +8,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
-/**
- * Created by Grant Abbondanza on 2/26/2018.
- */
-
 public class clearFavoritesDialog extends DialogFragment {
 
     //interface of clearFavoritesDialog

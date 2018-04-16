@@ -17,16 +17,19 @@ import com.google.firebase.auth.FirebaseAuth;
 
 
 public class SignUp extends AppCompatActivity {
+
     private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        Button signUpButton = (Button) findViewById(R.id.confirmSignUpButton);
-
         mAuth = FirebaseAuth.getInstance();
+        onCreateSetupForm();
+    }
 
-
+    private void onCreateSetupForm() {
+        Button signUpButton = (Button) findViewById(R.id.confirmSignUpButton);
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +61,7 @@ public class SignUp extends AppCompatActivity {
                         Toast.makeText(SignUp.this, "Passwords must match", Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    Toast.makeText(SignUp.this, "Email field must not be blank", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignUp.this, "All fields must be completed", Toast.LENGTH_LONG).show();
                 }
             }
         });

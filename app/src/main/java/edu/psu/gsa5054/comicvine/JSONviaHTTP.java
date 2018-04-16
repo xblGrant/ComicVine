@@ -42,7 +42,7 @@ public class JSONviaHTTP {
 
                 String resource = "characters";
                 String apiKey = "/?api_key=1b933662d46319e7bb1085f8a60f5a11519cc4f0";
-                String filter = "&filter=name%3A" + queryParam + ",publisher%3Adc,marvel&format=JSON";
+                String filter = "&filter=name%3A" + queryParam + "&format=JSON";
                 String sURL = "https://comicvine.gamespot.com/api/" + resource + apiKey + filter;
 
                 List<Characters> characters = null;
@@ -78,7 +78,11 @@ public class JSONviaHTTP {
 
             @Override
             public void onPostExecute(List<Characters> characters) {
-                // List View BullShit
+
+                // TODO: populate listView
+                for (Characters character: characters){
+                    Log.i(TAG, character.getName() + " " + character.getPublisher().getName());
+                }
             }
 
         }.execute();
@@ -94,7 +98,6 @@ public class JSONviaHTTP {
         JSONObject result = new JSONObject(sResponse);
         JSONArray arrayResult = result.getJSONArray("results");
 
-
         List<Characters> queryResult = new ArrayList<>();
         for (int i = 0; i < arrayResult.length(); i++){
             String results = arrayResult.get(i).toString();
@@ -103,7 +106,6 @@ public class JSONviaHTTP {
             Characters characterInfo = gson.fromJson(results, Characters.class);
 
             queryResult.add(characterInfo);
-            Log.i(TAG, "" + characterInfo.getName());
         }
 
         return queryResult;

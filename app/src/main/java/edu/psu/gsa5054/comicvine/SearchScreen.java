@@ -27,6 +27,8 @@ public class SearchScreen extends AppCompatActivity {
         return true;
     }
 
+    //END onCREATE ***************************************************************************
+
     @Override //this is for appBar options at top of screen. When user selects action
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
