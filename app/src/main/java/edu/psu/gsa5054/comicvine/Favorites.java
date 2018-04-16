@@ -31,15 +31,17 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
         setSupportActionBar(toolbar);
         //getActionBar().setDisplayHomeAsUpEnabled(true); //this provides "UP" navigation. not working right now
 
+        onCreateFavoritesAdapter();
+
         FavoriteDB.getInstance(this).asyncWritableDatabase(new FavoriteDB.onDBReadyListener() {
             @Override
             public void onDBReady(SQLiteDatabase faveDB) {
                 db = faveDB;
-                dbAsyncLoadCursor(false);
+//                dbAsyncLoadCursor(false);
             }
         });
 
-        onCreateFavoritesAdapter();
+
     }
 
     //initialize the adapter that is bound to the TextView
@@ -93,7 +95,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
 
             @Override
             protected void onPostExecute(Cursor cursor) {
-                adapter.swapCursor(cursor);
+//                adapter.swapCursor(cursor);
             }
         }.execute(scrollToEnd);
     }
