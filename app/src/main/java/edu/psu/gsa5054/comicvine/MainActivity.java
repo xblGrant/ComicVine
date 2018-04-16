@@ -30,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
 
-        onCreateLoginButton();
+        onCreateLoginForm();
         onCreateSignupButton();
         checkNetworkConnection();
     }
 
-    public void onCreateLoginButton() {
+    public void onCreateLoginForm() {
         Button loginButton = (Button) findViewById(R.id.loginButton);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
