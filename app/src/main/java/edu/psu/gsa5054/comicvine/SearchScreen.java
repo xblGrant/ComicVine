@@ -6,10 +6,16 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
-
 public class SearchScreen extends AppCompatActivity {
+
+    private SimpleCursorAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +25,27 @@ public class SearchScreen extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true); /This provides "UP" navigation. Can't get it to work right now
 
+        TextView searchTextField = (TextView) findViewById(R.id.searchTextView);
+
+        onCreateSetupSearchListView();
+
+
+    }
+
+    private void onCreateSearchListAdapter() {
+
+    }
+
+    private void onCreateSetupSearchListView() {
+        ListView listView = findViewById(R.id.searchListView);
+//        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // TODO: move to SearchItem Activity
+            }
+        });
     }
 
     @Override
