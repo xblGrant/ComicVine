@@ -42,7 +42,7 @@
         app:layout_constraintStart_toEndOf="@+id/searchTextView" />
 
     <ListView
-        android:id="@+id/searchListView"
+        android:id="@+id/resultsListView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
