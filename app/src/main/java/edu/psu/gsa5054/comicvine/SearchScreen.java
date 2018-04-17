@@ -1,23 +1,29 @@
 package edu.psu.gsa5054.comicvine;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +32,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -53,19 +60,13 @@ public class SearchScreen extends AppCompatActivity {
     }
 
     private void onCreateArrayAdapter() {
-        final ListView resultsView = findViewById(R.id.resultsListView);
-        // TODO: create layout for list item
-//        arrayAdapter = new ArrayAdapter<Characters>(this, R.layout./*?????*/, searchResults);
-        resultsView.setAdapter(arrayAdapter);
+        ListView resultsView = (ListView) findViewById(R.id.resultsListView);
 
-        resultsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                // TODO: move to SearchItem Activity and carry character information forward
-                String selectedCharacter = searchResults.get(position).getName();
-                Toast.makeText(getApplicationContext(), "Character Selected: " + selectedCharacter, Toast.LENGTH_LONG).show();
-            }
-        });
+        if (searchResults == null)
+            searchResults = new ArrayList<>();
+
+        arrayAdapter = new CharacterAdapter(this, R.layout.search_item, (ArrayList<Characters>) searchResults);
+        resultsView.setAdapter(arrayAdapter);
     }
 
     private void onCreateSearchButton() {
@@ -164,10 +165,7 @@ public class SearchScreen extends AppCompatActivity {
             @Override
             public void onPostExecute(List<Characters> characters) {
                 searchResults = characters;
-
-                for (Characters character: characters){
-                    Log.i(TAG, character.getName() + " " + character.getImage().getThumb_url());
-                }
+                onCreateArrayAdapter();
             }
         }.execute();
     }
@@ -179,17 +177,89 @@ public class SearchScreen extends AppCompatActivity {
             response.append(line);
         }
         String sResponse = response.toString();
-        JSONObject result = new JSONObject(sResponse);
-        JSONArray arrayResult = result.getJSONArray("results");
+        JSONObject results = new JSONObject(sResponse);
+        JSONArray arrayResult = results.getJSONArray("results");
 
-        Gson gson = new Gson();
-        List<Characters> queryResult = new ArrayList<>();
-        for (int i = 0; i < arrayResult.length(); i++){
-            String results = arrayResult.get(i).toString();
-            Characters characterInfo = gson.fromJson(results, Characters.class);
-            queryResult.add(characterInfo);
+        if (arrayResult != null) {
+            Gson gson = new Gson();
+            List<Characters> queryResult = new ArrayList<>();
+            for (int i = 0; i < arrayResult.length(); i++) {
+                String result = arrayResult.get(i).toString();
+                Characters characterInfo = gson.fromJson(result, Characters.class);
+                queryResult.add(characterInfo);
+            }
+
+            return queryResult;
         }
 
-        return queryResult;
+        return null;
+    }
+
+    public class CharacterAdapter extends ArrayAdapter<Characters> {
+        Context context;
+        int layoutResourceId;
+        ArrayList<Characters> data;
+
+        public CharacterAdapter(Context context, int resource, ArrayList<Characters> objects) {
+            super(context, resource, objects);
+            this.layoutResourceId = resource;
+            this.context = context;
+            this.data = objects;
+        }
+
+        @Override @NonNull
+        public View getView(int position, View convertView, @NonNull ViewGroup parent){
+            View row = convertView;
+            InfoHolder holder = null;
+            final int location = position;
+
+            if (row == null){
+                LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+                row = inflater.inflate(layoutResourceId, parent, false);
+
+                holder = new InfoHolder();
+                holder.image = (ImageView) row.findViewById(R.id.characterImage);
+                holder.name = (TextView) row.findViewById(R.id.characterName);
+                holder.publisher = (TextView) row.findViewById(R.id.characterPublisher);
+
+                row.setTag(holder);
+            } else {
+                holder = (InfoHolder) row.getTag();
+            }
+
+            Characters item = data.get(position);
+
+            Image image = item.getImage();
+            String imageUrl = ((image == null)
+                    ? "https://comicvine.gamespot.com/api/image/scale_avatar/6373148-blank.png"
+                    : image.getThumb_url());
+
+            Publisher publisher = item.getPublisher();
+            String publisherName = ((publisher == null) ? "" : publisher.getName());
+
+            Picasso.get()
+                    .load(imageUrl)
+                    .resize(200,200)
+                    .into(holder.image);
+            holder.name.setText(item.getName());
+            holder.publisher.setText(publisherName);
+
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // TODO: pass info with intent with extra info
+                    String selectedCharacter = searchResults.get(location).getName();
+                    Toast.makeText(getApplicationContext(), "Character Selected: " + selectedCharacter, Toast.LENGTH_LONG).show();
+                }
+            });
+
+            return row;
+        }
+
+        private class InfoHolder {
+            public ImageView image;
+            public TextView name;
+            public TextView publisher;
+        }
     }
 }
