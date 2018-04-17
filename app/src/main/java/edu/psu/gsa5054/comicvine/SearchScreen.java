@@ -46,6 +46,11 @@ public class SearchScreen extends AppCompatActivity {
     private static final String TAG = "SearchScreen";
     private static final String baseURL = "https://comicvine.gamespot.com/api/";
     private static final String apiKey = "/?api_key=1b933662d46319e7bb1085f8a60f5a11519cc4f0";
+    private static String CHARACTER_NAME = "characterName", ALIASES = "aliases", DOB = "dateofbirth",
+            COUNT_ISSUE_APPEARANCES = "countIssueAppearances", CREATORS = "creators", DECK = "deck",
+            DESCRIPTION = "description", GENDER = "gender", CHARACTER_ID = "characterID", MOVIES = "movies",
+            POWERS = "powers", REAL_NAME = "realName", TEAMS = "teams", IMAGE = "image", PUBLISHER_NAME = "publisherName",
+            FIRST_APPEARANCE_ISSUE_NAME = "firstAppearanceIssueName", FIRST_APPEARANCE_ISSUE_NUM = "firstAppearanceIssueNum";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,9 +252,40 @@ public class SearchScreen extends AppCompatActivity {
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // TODO: pass info with intent with extra info
-                    String selectedCharacter = searchResults.get(location).getName();
-                    Toast.makeText(getApplicationContext(), "Character Selected: " + selectedCharacter, Toast.LENGTH_LONG).show();
+                    Characters selected = searchResults.get(location);
+                    Intent intent = new Intent(SearchScreen.this, SelectedItem.class);
+
+                    intent.putExtra(CHARACTER_NAME, selected.getName());
+                    intent.putExtra(ALIASES, selected.getAliases());
+                    intent.putExtra(DOB, selected.getBirth());
+                    intent.putExtra(COUNT_ISSUE_APPEARANCES, selected.getCount_of_issue_appearances());
+                    intent.putExtra(CREATORS, selected.getCreators());
+                    intent.putExtra(DECK, selected.getDeck());
+                    intent.putExtra(DESCRIPTION, selected.getDescription());
+                    intent.putExtra(GENDER, selected.getGender());
+                    intent.putExtra(CHARACTER_ID, selected.getId());
+                    intent.putExtra(MOVIES, selected.getMovies());
+                    intent.putExtra(POWERS, selected.getPowers());
+                    intent.putExtra(REAL_NAME, selected.getReal_name());
+                    intent.putExtra(TEAMS, selected.getTeams());
+
+                    Image image = selected.getImage();
+                    String imageURL = ((image == null)
+                            ? "https://comicvine.gamespot.com/api/image/scale_avatar/6373148-blank.png"
+                            : image.getMedium_url());
+                    intent.putExtra(IMAGE, imageURL);
+
+                    Publisher publisher = selected.getPublisher();
+                    String publisherName = ((publisher == null) ? "" : publisher.getName());
+                    intent.putExtra(PUBLISHER_NAME, publisherName);
+
+                    FirstAppearanceIssue fai = selected.getFirst_appeared_in_issue();
+                    String faiName = ((fai == null) ? "" : fai.getName());
+                    String faiNum = ((fai == null) ? "" : fai.getIssue_number());
+                    intent.putExtra(FIRST_APPEARANCE_ISSUE_NAME, faiName);
+                    intent.putExtra(FIRST_APPEARANCE_ISSUE_NUM, faiNum);
+
+                    startActivity(intent);
                 }
             });
 
