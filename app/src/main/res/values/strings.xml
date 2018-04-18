@@ -3,8 +3,6 @@
     <string name="Email_hint">Email</string>
     <string name="Password_hint">Password</string>
     <string name="Login">Login</string>
-    <string name="googleSignin">Sign in with Google</string>
-    <string name="skipSignin">Skip Sign In</string>
     <string name="signoutMenuButton">Sign Out</string>
     <string name="searchMenuButton">Search</string>
     <string name="favoritesMenuButton">Favorites</string>
@@ -12,7 +10,15 @@
     <string name="SearchEditText">ex: \"Superman\"</string>
     <string name="eraseFavorites">Erase Favorites</string>
     <string name="addFavorite">Add To Favorites</string>
-    <string name="TestValue">TestValue</string>
     <string name="SignUp">Sign Up</string>
     <string name="Confirm_Password">Confirm Password</string>
+
+    <!--SelectedItem String Values-->
+    <string name="characterImage">Image of Selected Character</string>
+    <string name="characterName">Name: </string>
+    <string name="publisherName">Publisher: </string>
+    <string name="issuesAppeared"># Issues in: </string>
+    <string name="firstAppearance">First Appearance: </string>
+    <string name="characterSummary">Summary: </string>
+    <string name="characterPowers">Powers: </string>
 </resources>
