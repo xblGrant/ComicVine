@@ -99,7 +99,7 @@ public class SelectedItem extends AppCompatActivity {
 
         TextView selectedFirstAppearance = findViewById(R.id.firstAppearanceTextView);
         if (faiName != null && faiNumber != null) {
-            info = "First Appearance: " + faiName + " #" + faiNumber;
+            info = "First Appearance:\n" + faiName + " #" + faiNumber;
             selectedFirstAppearance.setText(info);
         } else {
             selectedFirstAppearance.setText("");
