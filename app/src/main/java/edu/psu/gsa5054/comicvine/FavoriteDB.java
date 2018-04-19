@@ -12,24 +12,18 @@ public class FavoriteDB extends SQLiteOpenHelper {
         void onDBReady(SQLiteDatabase faveDB);
     }
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "fave.db";
 
-    private static final String SQL_CREATE_USER =
-            "CREATE TABLE user ( " +
-                    "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "UID TEXT UNIQUE NOT NULL)";
 
     private static final String SQL_CREATE_FAVORITE =
             "CREATE TABLE FAVORITE ( " +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "CharacterID TEXT, " +
-                    "UID TEXT, " +
-                    "Foreign Key(UID) REFERENCES user(UID))";
+                    "UID TEXT ";
 
 
-    private static final String SQL_DELETE_USER =
-            "DROP TABLE IF EXISTS user";
+
     private static final String SQL_DELETE_FAVORITE =
             "DROP TABLE IF EXISTS FAVORITE";
 
@@ -50,7 +44,6 @@ public class FavoriteDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_USER);
         db.execSQL(SQL_CREATE_FAVORITE);
 
         // No information to populate tables
@@ -59,9 +52,9 @@ public class FavoriteDB extends SQLiteOpenHelper {
         db.beginTransaction();
         ContentValues values = new ContentValues();
 //        ...
-        values.put("UID", "test"/*string value*/);
+        //values.put("UID", "test"/*string value*/);
 //        ...
-        db.insert(/*table name*/"user", null, values);
+        //db.insert(/*table name*/"user", null, values);
 //        ...
         db.setTransactionSuccessful();
         db.endTransaction();
@@ -70,7 +63,6 @@ public class FavoriteDB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(SQL_DELETE_USER);
         db.execSQL(SQL_DELETE_FAVORITE);
         onCreate(db);
     }

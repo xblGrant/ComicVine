@@ -17,11 +17,16 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 //this activity implements clearFavoritesDialogListener
 public class Favorites extends AppCompatActivity implements clearFavoritesDialog.clearFavoritesDialogListener {
 
     private SQLiteDatabase db;
     private SimpleCursorAdapter adapter;
+
+    Boolean dbReady = false;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
             @Override
             public void onDBReady(SQLiteDatabase faveDB) {
                 db = faveDB;
+                dbReady = true;
 //                dbAsyncLoadCursor(false);
             }
         });

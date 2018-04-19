@@ -1,6 +1,8 @@
 package edu.psu.gsa5054.comicvine;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 public class SelectedItem extends AppCompatActivity {
@@ -19,6 +22,10 @@ public class SelectedItem extends AppCompatActivity {
             FIRST_APPEARANCE_ISSUE_NAME = "firstAppearanceIssueName", FIRST_APPEARANCE_ISSUE_NUM = "firstAppearanceIssueNum";
     private String characterName, characterID, countIssueAppearances, deck, imageURL, publisherName, faiName, faiNumber;
 
+    private SQLiteDatabase db
+    Boolean dbReady = false;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +34,17 @@ public class SelectedItem extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         onCreateGetIntentInformation();
-        // TODO: populate fields with the information passed from the intent
         onCreateViewFields();
+
+        mAuth = FirebaseAuth.getInstance();
+
+        FavoriteDB.getInstance(this).asyncWritableDatabase(new FavoriteDB.onDBReadyListener() {
+            @Override
+            public void onDBReady(SQLiteDatabase faveDB) {
+                db = faveDB;
+                dbReady = true;
+            }
+        });
     }
 
     @Override
@@ -61,12 +77,26 @@ public class SelectedItem extends AppCompatActivity {
             }
 
             case R.id.addFavoriteButton: {
-                //TODO: this should add the displayed item to the favorites list, characterID
-                Toast.makeText(SelectedItem.this, "not implemented yet", Toast.LENGTH_SHORT).show();
+                addToFavorites();
                 return true;
             }
         }
         return true;
+    }
+
+    private void addToFavorites() {
+        if (dbReady){
+            db.beginTransaction();
+            ContentValues values = new ContentValues();
+            values.put("CharacterID", characterID/*string value*/);
+            values.put("UID", mAuth.getUid());
+            db.insert(/*table name*/"FAVORITE", null, values);
+            db.setTransactionSuccessful();
+            db.endTransaction();
+        }
+        else {
+            Toast.makeText(SelectedItem.this, "Try again in 5 seconds", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void onCreateGetIntentInformation() {

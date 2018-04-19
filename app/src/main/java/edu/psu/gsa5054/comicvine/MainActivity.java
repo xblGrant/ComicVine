@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task){
                                     if(task.isSuccessful()){
                                         String UID = mAuth.getUid();
-                                        //TODO add UID into local database.
                                         startActivity(new Intent(MainActivity.this, SearchScreen.class));
                                     }
                                     else{
