@@ -20,8 +20,7 @@ public class FavoriteDB extends SQLiteOpenHelper {
             "CREATE TABLE FAVORITE ( " +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "CharacterID TEXT, " +
-                    "UID TEXT ";
-
+                    "UID TEXT)";
 
 
     private static final String SQL_DELETE_FAVORITE =

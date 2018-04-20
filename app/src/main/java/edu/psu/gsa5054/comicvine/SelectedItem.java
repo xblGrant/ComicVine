@@ -22,7 +22,7 @@ public class SelectedItem extends AppCompatActivity {
             FIRST_APPEARANCE_ISSUE_NAME = "firstAppearanceIssueName", FIRST_APPEARANCE_ISSUE_NUM = "firstAppearanceIssueNum";
     private String characterName, characterID, countIssueAppearances, deck, imageURL, publisherName, faiName, faiNumber;
 
-    private SQLiteDatabase db
+    private SQLiteDatabase db;
     Boolean dbReady = false;
     private FirebaseAuth mAuth;
 
