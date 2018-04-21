@@ -50,7 +50,6 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
     }
 
     //initialize the adapter that is bound to the TextView
-    // TODO: update to populate favorites list... listView
     private void onCreateFavoritesAdapter() {
         //initially set to null. it is not ready
         adapter = new SimpleCursorAdapter(this, R.layout.activity_favorites, null,
@@ -59,7 +58,14 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
 
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                //
+                // TODO: get favorites query from database.
+                // following will be similar to SearchScreen
+                // TODO: for each item in the resulting query, call ComicVine with characterID
+                // TODO: with character information populate listview and set OnClickListener
+                // TODO: use OnClickListener to start a new Intent to open SelectedItem
+
+                // TODO: in SelectedItem, toggle btwn Add to Favorites / Remove from Favorites ???
+
 //                TextView mainActivityTextView = (TextView) findViewById(R.id.databaseTestTextView);
 //                //should set the textView to "test"
 //                String test = cursor.getString(cursor.getColumnIndex("UID"));
