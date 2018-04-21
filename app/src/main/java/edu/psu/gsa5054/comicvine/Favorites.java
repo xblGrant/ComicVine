@@ -9,12 +9,10 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +34,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
         setSupportActionBar(toolbar);
         //getActionBar().setDisplayHomeAsUpEnabled(true); //this provides "UP" navigation. not working right now
 
+        mAuth = FirebaseAuth.getInstance();
         onCreateFavoritesAdapter();
 
         FavoriteDB.getInstance(this).asyncWritableDatabase(new FavoriteDB.onDBReadyListener() {
@@ -43,7 +42,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
             public void onDBReady(SQLiteDatabase faveDB) {
                 db = faveDB;
                 dbReady = true;
-//                dbAsyncLoadCursor(false);
+                dbAsyncLoadCursor();
             }
         });
 
@@ -83,27 +82,27 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
     //END onCREATE ***************************************************************************
 
     @SuppressLint("StaticFieldLeak")
-    private void dbAsyncLoadCursor(boolean scrollToEnd) {
+    private void dbAsyncLoadCursor() {
 
-        new AsyncTask<Boolean, Void, Cursor>() {
-            boolean scrollToEnd;
+        new AsyncTask<Void, Void, Cursor>() {
+            String userID;
 
             @Override
-            protected Cursor doInBackground(Boolean... params) {
+            protected Cursor doInBackground(Void... params) {
                 // TODO: Query database for favorites.
                 // TODO: query based on current user.
-//                scrollToEnd = params[0];
-//                String where = null;
-//                String[] projection = {"_id", "UID"};
-//                return db.query("USER", projection, where, null, null, null, null);
-                return null;
+                userID = mAuth.getUid();
+                String where = "UID = " + userID;
+                String[] projection = {"_id", "UID", "CharacterID"};
+                return db.query("FAVORITE", projection, where, null, null, null, null);
             }
 
             @Override
             protected void onPostExecute(Cursor cursor) {
-//                adapter.swapCursor(cursor);
+                adapter.swapCursor(cursor);
             }
-        }.execute(scrollToEnd);
+
+        }.execute();
     }
 
     @Override //this is for appBar options at top of screen. When user selects action
@@ -132,7 +131,29 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
     }
 
     // TODO: implement to erase favorites from database
+    @SuppressLint("StaticFieldLeak")
     public void eraseFavorites(){
+
+        new AsyncTask<Void, Void, Cursor>() {
+            String userID;
+
+            @Override
+            protected Cursor doInBackground(Void... params) {
+                // TODO: Delete entries for specific UID.
+//                userID = mAuth.getUid();
+//                String where = "UID = " + userID;
+//                String[] projection = {"_id", "UID", "CharacterID"};
+//                return db.query("FAVORITE", projection, where, null, null, null, null);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Cursor cursor) {
+                adapter.swapCursor(cursor);
+            }
+        };
+
+        // TODO: does this go here?
         //this creates the new dialog
         DialogFragment dialogFragment = new clearFavoritesDialog();
         //this causes the dialog to be shown to user

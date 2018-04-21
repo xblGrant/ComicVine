@@ -95,7 +95,7 @@ public class SelectedItem extends AppCompatActivity {
             db.endTransaction();
         }
         else {
-            Toast.makeText(SelectedItem.this, "Try again in 5 seconds", Toast.LENGTH_LONG).show();
+            Toast.makeText(SelectedItem.this, "Try again shortly", Toast.LENGTH_LONG).show();
         }
     }
 
