@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -45,6 +46,7 @@ import edu.psu.gsa5054.comicvine.ComicVine.*;
 
 public class SearchScreen extends AppCompatActivity {
 
+
     SharedPreferences sharedPreferences;
     private ArrayAdapter<Characters> arrayAdapter;
     private List<Characters> searchResults;
@@ -54,11 +56,15 @@ public class SearchScreen extends AppCompatActivity {
     private static String CHARACTER_NAME = "characterName", COUNT_ISSUE_APPEARANCES = "countIssueAppearances",
             DECK = "deck", CHARACTER_ID = "characterID", IMAGE = "image", PUBLISHER_NAME = "publisherName",
             FIRST_APPEARANCE_ISSUE_NAME = "firstAppearanceIssueName", FIRST_APPEARANCE_ISSUE_NUM = "firstAppearanceIssueNum";
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_screen);
+
+        mAuth = FirebaseAuth.getInstance();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.searchScreenToolbar);
         setSupportActionBar(toolbar);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -118,9 +124,8 @@ public class SearchScreen extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.signoutMenuButton: {
                 //user chose to signout. direct to activity_main and sign out if signed in.
-                //TODO: check if signed in, if true (sign out, direct to main_activity) else (direct to main_activity)
+                mAuth.signOut();
                 startActivity(new Intent(SearchScreen.this, MainActivity.class));
-                Toast.makeText(SearchScreen.this, "Signed Out", Toast.LENGTH_SHORT).show();
                 return true;
             }
 

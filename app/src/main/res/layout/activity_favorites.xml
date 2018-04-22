@@ -10,7 +10,7 @@
         android:id="@+id/favoritesToolbar"
         android:layout_width="0dp"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/Aquamarine"
+        android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintLeft_toLeftOf="parent"

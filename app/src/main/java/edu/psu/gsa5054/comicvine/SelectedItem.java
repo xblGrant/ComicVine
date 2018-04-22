@@ -82,9 +82,9 @@ public class SelectedItem extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.signoutMenuButton: {
                 //user chose to signout. direct to activity_main and sign out if signed in.
-                //TODO: check if signed in, if true (sign out, direct to main_activity) else (direct to main_activity)
+                mAuth.signOut();
                 startActivity(new Intent(SelectedItem.this, MainActivity.class));
-                Toast.makeText(SelectedItem.this, "Signed Out", Toast.LENGTH_SHORT).show();
+
                 return true;
             }
 
