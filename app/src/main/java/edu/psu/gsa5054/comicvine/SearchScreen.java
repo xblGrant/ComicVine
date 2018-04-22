@@ -4,8 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -40,6 +45,7 @@ import edu.psu.gsa5054.comicvine.ComicVine.*;
 
 public class SearchScreen extends AppCompatActivity {
 
+    SharedPreferences sharedPreferences;
     private ArrayAdapter<Characters> arrayAdapter;
     private List<Characters> searchResults;
     private static final String TAG = "SearchScreen";
@@ -55,9 +61,26 @@ public class SearchScreen extends AppCompatActivity {
         setContentView(R.layout.activity_search_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.searchScreenToolbar);
         setSupportActionBar(toolbar);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPreferences.getBoolean("olive_header",false)) {
+            toolbar.setBackgroundColor(Color.GREEN);
+        }
 
         onCreateArrayAdapter();
         onCreateSearchButton();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.searchScreenToolbar);
+        if (sharedPreferences.getBoolean("olive_header",false)) {
+            toolbar.setBackgroundColor(Color.GREEN);
+        }
+        else {
+            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        }
     }
 
     private void onCreateArrayAdapter() {
@@ -105,6 +128,11 @@ public class SearchScreen extends AppCompatActivity {
                 //user chose to go to favorites page. direct to activity_favorites.
                 startActivity(new Intent(SearchScreen.this, Favorites.class));
                 return true;
+            }
+
+            case R.id.preferencesButton: {
+                //user choses to go to preferences page
+                startActivity(new Intent(SearchScreen.this, SettingsActivity.class));
             }
         }
         return true;

@@ -27,7 +27,8 @@
             android:name=".Favorites"
             android:parentActivityName=".SearchScreen" />
         <activity android:name=".SelectedItem" />
-        <activity android:name=".SignUp"></activity>
+        <activity android:name=".SignUp" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>

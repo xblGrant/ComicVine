@@ -12,6 +12,9 @@
     <string name="addFavorite">Add To Favorites</string>
     <string name="SignUp">Sign Up</string>
     <string name="Confirm_Password">Confirm Password</string>
+    <string name="green">Green Header Color?</string>
+    <string name="preferences">Settings</string>
+    <string name="olive_header">olive_header</string>
 
     <!--SelectedItem String Values-->
     <string name="characterImage">Image of Selected Character</string>
@@ -21,4 +24,6 @@
     <string name="firstAppearance">First Appearance: </string>
     <string name="characterSummary">Summary: </string>
     <string name="characterPowers">Powers: </string>
+
+
 </resources>

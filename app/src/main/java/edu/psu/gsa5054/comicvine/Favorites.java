@@ -5,10 +5,14 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -47,6 +51,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
 
     private SQLiteDatabase db;
     private List<Characters> searchResults;
+    private SharedPreferences sharedPreferences;
     private ArrayAdapter<Characters> arrayAdapter;
     private AsyncTask getFavoriteDataAsyncTask;
     private static final String TAG = "Favorites";
@@ -68,6 +73,11 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
 
         mAuth = FirebaseAuth.getInstance();
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPreferences.getBoolean("olive_header",false)) {
+            toolbar.setBackgroundColor(Color.GREEN);
+        }
+
         FavoriteDB.getInstance(this).asyncWritableDatabase(new FavoriteDB.onDBReadyListener() {
             @Override
             public void onDBReady(SQLiteDatabase faveDB) {
@@ -76,6 +86,19 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
                 onCreateArrayAdapter();
             }
         });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.favoritesToolbar);
+        if (sharedPreferences.getBoolean("olive_header",false)) {
+            toolbar.setBackgroundColor(Color.GREEN);
+        }
+        else {
+            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        }
     }
 
     //initialize the adapter that is bound to the TextView

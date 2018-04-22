@@ -13,4 +13,9 @@
         android:title="@string/favoritesMenuButton"
         android:orderInCategory="200"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/preferencesButton"
+        android:title="@string/preferences"
+        android:orderInCategory="400"
+        app:showAsAction="ifRoom"/>
 </menu>

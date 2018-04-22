@@ -3,7 +3,11 @@ package edu.psu.gsa5054.comicvine;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +28,7 @@ public class SelectedItem extends AppCompatActivity {
     private String characterName, characterID, countIssueAppearances, deck, imageURL, publisherName, faiName, faiNumber;
 
     private SQLiteDatabase db;
+    private SharedPreferences sharedPreferences;
     Boolean dbReady = false;
     private FirebaseAuth mAuth;
 
@@ -39,6 +44,11 @@ public class SelectedItem extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPreferences.getBoolean("olive_header",false)) {
+            toolbar.setBackgroundColor(Color.GREEN);
+        }
+
         FavoriteDB.getInstance(this).asyncWritableDatabase(new FavoriteDB.onDBReadyListener() {
             @Override
             public void onDBReady(SQLiteDatabase faveDB) {
@@ -46,6 +56,19 @@ public class SelectedItem extends AppCompatActivity {
                 dbReady = true;
             }
         });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.selectedItemToolbar);
+        if (sharedPreferences.getBoolean("olive_header",false)) {
+            toolbar.setBackgroundColor(Color.GREEN);
+        }
+        else {
+            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        }
     }
 
     @Override
@@ -58,9 +81,8 @@ public class SelectedItem extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.signoutMenuButton: {
-
-                mAuth.signOut();
-
+                //user chose to signout. direct to activity_main and sign out if signed in.
+                //TODO: check if signed in, if true (sign out, direct to main_activity) else (direct to main_activity)
                 startActivity(new Intent(SelectedItem.this, MainActivity.class));
                 Toast.makeText(SelectedItem.this, "Signed Out", Toast.LENGTH_SHORT).show();
                 return true;

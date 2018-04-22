@@ -20,7 +20,7 @@
         android:id="@+id/selectedItemToolbar"
         android:layout_width="0dp"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/Aquamarine"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintLeft_toLeftOf="parent"
