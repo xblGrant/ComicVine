@@ -85,6 +85,9 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
         getFavoritesData();
         getFavoritesByID(characterIDs);
 
+        if (searchResults == null)
+            searchResults = new ArrayList<>();
+
         arrayAdapter = new CharacterAdapter(this, R.layout.search_item, (ArrayList<Characters>) searchResults);
         resultsView.setAdapter(arrayAdapter);
     }
@@ -109,7 +112,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
                 Cursor c;
                 userID = mAuth.getUid();
                 String where = "UID = " + userID;
-                String[] projection = {"_id", "CharacterID"};
+                String[] projection = {"CharacterID"};
                 c = db.query("FAVORITE", projection, where, null, null, null, null);
 
                 ArrayList<String> characterIDs = new ArrayList<>();
@@ -117,19 +120,17 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
                 try {
                     while (c.moveToNext()) {
                         characterIDs.add(c.getString(c.getColumnIndex("CharacterID")));
+                        Log.i("FAVORITES", c.getString(c.getColumnIndex("CharacterID")));
                     }
+                } finally {
+                    c.close();
                 }
-                finally {
-                        c.close();
-                    }
-
-
-                    return characterIDs;
+                return characterIDs;
             }
 
             @Override
-            protected void onPostExecute(ArrayList<String> characterIDs) {
-                characterIDs = characterIDs;
+            protected void onPostExecute(ArrayList<String> listOfCharacters) {
+                characterIDs = listOfCharacters;
             }
 
         }.execute();
@@ -154,7 +155,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
 
             @Override
             protected void onPostExecute(Void nothing) {
-                
+
             }
         };
 
