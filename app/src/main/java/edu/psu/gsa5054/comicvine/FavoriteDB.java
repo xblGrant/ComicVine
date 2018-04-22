@@ -1,5 +1,6 @@
 package edu.psu.gsa5054.comicvine;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -11,15 +12,16 @@ public class FavoriteDB extends SQLiteOpenHelper {
         void onDBReady(SQLiteDatabase faveDB);
     }
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "fave.db";
 
 
     private static final String SQL_CREATE_FAVORITE =
             "CREATE TABLE FAVORITE ( " +
-                    "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "_id INTEGER AUTOINCREMENT, " +
                     "CharacterID TEXT, " +
-                    "UID TEXT)";
+                    "UID TEXT, "+
+                    "PRIMARY KEY (_id, CHARACTERID, UID)";
 
 
     private static final String SQL_DELETE_FAVORITE =
@@ -41,6 +43,15 @@ public class FavoriteDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_FAVORITE);
+        db.beginTransaction();
+        ContentValues values = new ContentValues();
+        values.put("characterID", "1459"/*string value*/);
+        values.put("UID", "skQ7jllbPdVRH8EKrxmmfsWNF5s2");
+        db.insert(/*table name*/"FAVORITE", null, values);
+        values.put("characterID", "1699");
+        values.put("UID", "skQ7jllbPdVRH8EKrxmmfsWNF5s2");
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     @Override

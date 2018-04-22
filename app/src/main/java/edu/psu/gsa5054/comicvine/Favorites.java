@@ -109,15 +109,27 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
                 Cursor c;
                 userID = mAuth.getUid();
                 String where = "UID = " + userID;
-                String[] projection = {"_id", "UID", "CharacterID"};
+                String[] projection = {"_id", "CharacterID"};
                 c = db.query("FAVORITE", projection, where, null, null, null, null);
 
+                ArrayList<String> characterIDs = new ArrayList<>();
 
+                try {
+                    while (c.moveToNext()) {
+                        characterIDs.add(c.getString(c.getColumnIndex("CharacterID")));
+                    }
+                }
+                finally {
+                        c.close();
+                    }
+
+
+                    return characterIDs;
             }
 
             @Override
-            protected void onPostExecute(ArrayList<String> characterList) {
-                characterIDs = characterList;
+            protected void onPostExecute(ArrayList<String> characterIDs) {
+                characterIDs = characterIDs;
             }
 
         }.execute();
