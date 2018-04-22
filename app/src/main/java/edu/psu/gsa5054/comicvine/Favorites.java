@@ -139,16 +139,13 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
         dialogFragment.show(getFragmentManager(), "clearFavorites");
     }
 
-    //TODO: this should make the current favorites be erased
     //this is from the clearFavoritesDialogListener interface
     public void onPositiveClick() {
-        Toast.makeText(Favorites.this, "Attempting to delete", Toast.LENGTH_LONG).show();
         eraseFavoritesData();
     }
 
     @SuppressLint("StaticFieldLeak")
     private void eraseFavoritesData() {
-        Log.i(TAG, "eraseFavoritesData()");
         new AsyncTask<Void, Void, Void>() {
             String userID;
 
@@ -157,17 +154,15 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
                 userID = mAuth.getUid();
                 String where = "UID=?";
                 db.delete("FAVORITE", where, new String[]{userID});
-                Log.i(TAG, "DO IN BACKGROUND");
                 return null;
             }
 
             @Override
             protected void onPostExecute(Void v) {
                 setArrayAdapter(new ArrayList<Characters>());
-                Log.i(TAG, "ERASE FAVORITES");
                 Toast.makeText(Favorites.this, "Favorites erased", Toast.LENGTH_LONG).show();
             }
-        };
+        }.execute();
     }
 
     @Override //this is for appBar options at top of screen. When user selects action
