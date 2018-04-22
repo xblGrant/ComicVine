@@ -46,9 +46,9 @@ import java.util.List;
 public class Favorites extends AppCompatActivity implements clearFavoritesDialog.clearFavoritesDialogListener {
 
     private SQLiteDatabase db;
-    private List<String> characterIDs;
     private List<Characters> searchResults;
-    private static final String TAG = "SearchScreen";
+    private ArrayAdapter<Characters> arrayAdapter;
+    private static final String TAG = "Favorites";
     private static final String baseURL = "https://comicvine.gamespot.com/api/";
     private static final String apiKey = "/?api_key=1b933662d46319e7bb1085f8a60f5a11519cc4f0";
     private static String CHARACTER_NAME = "characterName", COUNT_ISSUE_APPEARANCES = "countIssueAppearances",
@@ -79,14 +79,11 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
 
     //initialize the adapter that is bound to the TextView
     private void onCreateArrayAdapter() {
-        ArrayAdapter<Characters> arrayAdapter;
-        ListView resultsView = (ListView) findViewById(R.id.favoritesListView);
-
         getFavoritesData();
-        getFavoritesByID(characterIDs);
+    }
 
-        if (searchResults == null)
-            searchResults = new ArrayList<>();
+    private void setArrayAdapter(List<Characters> searchResults) {
+        ListView resultsView = (ListView) findViewById(R.id.favoritesListView);
 
         arrayAdapter = new CharacterAdapter(this, R.layout.search_item, (ArrayList<Characters>) searchResults);
         resultsView.setAdapter(arrayAdapter);
@@ -111,7 +108,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
             protected ArrayList<String> doInBackground(Void... params) {
                 Cursor c;
                 userID = mAuth.getUid();
-                String where = "UID = " + userID;
+                String where = "UID = '" + userID + "'";
                 String[] projection = {"CharacterID"};
                 c = db.query("FAVORITE", projection, where, null, null, null, null);
 
@@ -120,7 +117,6 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
                 try {
                     while (c.moveToNext()) {
                         characterIDs.add(c.getString(c.getColumnIndex("CharacterID")));
-                        Log.i("FAVORITES", c.getString(c.getColumnIndex("CharacterID")));
                     }
                 } finally {
                     c.close();
@@ -129,41 +125,49 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
             }
 
             @Override
-            protected void onPostExecute(ArrayList<String> listOfCharacters) {
-                characterIDs = listOfCharacters;
+            protected void onPostExecute(ArrayList<String> characterIDs) {
+                getFavoritesByID(characterIDs);
             }
 
         }.execute();
     }
 
-    // TODO: implement to erase favorites from database
-    @SuppressLint("StaticFieldLeak")
-    public void eraseFavoritesData() {
+    private void eraseFavoritesDialog() {
+        //this creates the new dialog
+        DialogFragment dialogFragment = new clearFavoritesDialog();
+        //this causes the dialog to be shown to user
+        dialogFragment.show(getFragmentManager(), "clearFavorites");
+    }
 
+    //TODO: this should make the current favorites be erased
+    //this is from the clearFavoritesDialogListener interface
+    public void onPositiveClick() {
+        Toast.makeText(Favorites.this, "Attempting to delete", Toast.LENGTH_LONG).show();
+        eraseFavoritesData();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void eraseFavoritesData() {
+        Log.i(TAG, "eraseFavoritesData()");
         new AsyncTask<Void, Void, Void>() {
             String userID;
 
             @Override
             protected Void doInBackground(Void... params) {
-                // TODO: Delete entries for specific UID.
-//                userID = mAuth.getUid();
-//                String where = "UID = " + userID;
-//                String[] projection = {"_id", "UID", "CharacterID"};
-//                return db.query("FAVORITE", projection, where, null, null, null, null);
+                userID = mAuth.getUid();
+                String where = "UID=?";
+                db.delete("FAVORITE", where, new String[]{userID});
+                Log.i(TAG, "DO IN BACKGROUND");
                 return null;
             }
 
             @Override
-            protected void onPostExecute(Void nothing) {
-
+            protected void onPostExecute(Void v) {
+                setArrayAdapter(new ArrayList<Characters>());
+                Log.i(TAG, "ERASE FAVORITES");
+                Toast.makeText(Favorites.this, "Favorites erased", Toast.LENGTH_LONG).show();
             }
         };
-
-        // TODO: does this go here?
-        //this creates the new dialog
-        DialogFragment dialogFragment = new clearFavoritesDialog();
-        //this causes the dialog to be shown to user
-        dialogFragment.show(getFragmentManager(), "clearFavorites");
     }
 
     @Override //this is for appBar options at top of screen. When user selects action
@@ -185,16 +189,10 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
 
             case R.id.clearFavoritesButton: {
                 //user chose to clear favorites. AlertDialog to verify clearing favorites
-                eraseFavoritesData();
+                eraseFavoritesDialog();
             }
         }
         return true;
-    }
-
-    //TODO: this should make the current favorites be erased
-    //this is from the clearFavoritesDialogListener interface
-    public void onPositiveClick() {
-        Toast.makeText(this, "Not Yet Implemented", Toast.LENGTH_LONG).show();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -205,20 +203,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
             public List<Characters> doInBackground(Void... params) {
                 List<Characters> characters = new ArrayList<>();
 
-                List<String> queryParams = new ArrayList<>();
-                for (int i = 0; i < queryID.size(); i++) {
-                    StringBuilder buffedUp = new StringBuilder();
-                    String[] parts = queryID.get(i).split(" ");
-                    int length = parts.length;
-                    if (length > 1) {
-                        for (int j = 0; j < length - 1; i++) {
-                            buffedUp.append(parts[i] + "_");
-                        }
-                        buffedUp.append(parts[length - 1]);
-                        queryParams.add(buffedUp.toString());
-                    }
-                }
-
+                List<String> queryParams = queryID;
                 for (int i = 0; i < queryParams.size(); i++) {
                     String filter = "&filter=id%3A" + queryParams.get(i) + "&format=JSON";
                     String sURL = baseURL + "characters" + apiKey + filter;
@@ -246,8 +231,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
                             urlConnection.disconnect();
                         }
                     } catch (Exception e) {
-                        Log.e(TAG, "Error trying to traverse que" +
-                                "ry results: " + e.getMessage());
+                        Log.e(TAG, "Error trying to traverse query results: " + e.getMessage());
                     }
                 }
 
@@ -257,6 +241,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
             @Override
             public void onPostExecute(List<Characters> characters) {
                 searchResults = characters;
+                setArrayAdapter(characters);
             }
         }.execute();
     }
@@ -291,11 +276,10 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
             this.data = objects;
         }
 
-        @Override
-        @NonNull
+        @Override  @NonNull
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             View row = convertView;
-            CharacterAdapter.InfoHolder holder = null;
+            CharacterAdapter.InfoHolder holder;
             final int location = position;
 
             if (row == null) {

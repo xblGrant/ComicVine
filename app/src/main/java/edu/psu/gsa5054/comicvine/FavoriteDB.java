@@ -42,17 +42,6 @@ public class FavoriteDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_FAVORITE);
-
-        db.beginTransaction();
-        ContentValues values = new ContentValues();
-        values.put("characterID", "1459"/*string value*/);
-        values.put("UID", "skQ7jllbPdVRH8EKrxmmfsWNF5s2");
-        db.insert(/*table name*/"FAVORITE", null, values);
-        values.put("characterID", "1699");
-        values.put("UID", "skQ7jllbPdVRH8EKrxmmfsWNF5s2");
-        db.insert(/*table name*/"FAVORITE", null, values);
-        db.setTransactionSuccessful();
-        db.endTransaction();
     }
 
     @Override
