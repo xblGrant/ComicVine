@@ -45,8 +45,8 @@ import java.util.List;
 //this activity implements clearFavoritesDialogListener
 public class Favorites extends AppCompatActivity implements clearFavoritesDialog.clearFavoritesDialogListener {
 
-    private Cursor cursor;
     private SQLiteDatabase db;
+    private List<String> characterIDs;
     private List<Characters> searchResults;
     private static final String TAG = "SearchScreen";
     private static final String baseURL = "https://comicvine.gamespot.com/api/";
@@ -80,9 +80,10 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
     //initialize the adapter that is bound to the TextView
     private void onCreateArrayAdapter() {
         ArrayAdapter<Characters> arrayAdapter;
-        ListView resultsView = (ListView) findViewById(R.id.resultsListView);
+        ListView resultsView = (ListView) findViewById(R.id.favoritesListView);
 
-        getFavoritesByID();
+        getFavoritesData();
+        getFavoritesByID(characterIDs);
 
         arrayAdapter = new CharacterAdapter(this, R.layout.search_item, (ArrayList<Characters>) searchResults);
         resultsView.setAdapter(arrayAdapter);
@@ -99,23 +100,57 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
     @SuppressLint("StaticFieldLeak")
     private void getFavoritesData() {
 
-        new AsyncTask<Void, Void, Cursor>() {
+        // TODO: get favorites information.
+        new AsyncTask<Void, Void, ArrayList<String>>() {
             String userID;
 
             @Override
-            protected Cursor doInBackground(Void... params) {
+            protected ArrayList<String> doInBackground(Void... params) {
+                Cursor c;
                 userID = mAuth.getUid();
                 String where = "UID = " + userID;
                 String[] projection = {"_id", "UID", "CharacterID"};
-                return db.query("FAVORITE", projection, where, null, null, null, null);
+                c = db.query("FAVORITE", projection, where, null, null, null, null);
+
+
             }
 
             @Override
-            protected void onPostExecute(Cursor cursor) {
-                Favorites.this.cursor = cursor;
+            protected void onPostExecute(ArrayList<String> characterList) {
+                characterIDs = characterList;
             }
 
         }.execute();
+    }
+
+    // TODO: implement to erase favorites from database
+    @SuppressLint("StaticFieldLeak")
+    public void eraseFavoritesData() {
+
+        new AsyncTask<Void, Void, Void>() {
+            String userID;
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                // TODO: Delete entries for specific UID.
+//                userID = mAuth.getUid();
+//                String where = "UID = " + userID;
+//                String[] projection = {"_id", "UID", "CharacterID"};
+//                return db.query("FAVORITE", projection, where, null, null, null, null);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void nothing) {
+                
+            }
+        };
+
+        // TODO: does this go here?
+        //this creates the new dialog
+        DialogFragment dialogFragment = new clearFavoritesDialog();
+        //this causes the dialog to be shown to user
+        dialogFragment.show(getFragmentManager(), "clearFavorites");
     }
 
     @Override //this is for appBar options at top of screen. When user selects action
@@ -137,110 +172,83 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
 
             case R.id.clearFavoritesButton: {
                 //user chose to clear favorites. AlertDialog to verify clearing favorites
-                eraseFavorites();
+                eraseFavoritesData();
             }
         }
         return true;
     }
 
-    // TODO: implement to erase favorites from database
-    @SuppressLint("StaticFieldLeak")
-    public void eraseFavorites(){
-
-        new AsyncTask<Void, Void, Cursor>() {
-            String userID;
-
-            @Override
-            protected Cursor doInBackground(Void... params) {
-                // TODO: Delete entries for specific UID.
-//                userID = mAuth.getUid();
-//                String where = "UID = " + userID;
-//                String[] projection = {"_id", "UID", "CharacterID"};
-//                return db.query("FAVORITE", projection, where, null, null, null, null);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Cursor cursor) {
-                Favorites.this.cursor = cursor;
-            }
-        };
-
-        // TODO: does this go here?
-        //this creates the new dialog
-        DialogFragment dialogFragment = new clearFavoritesDialog();
-        //this causes the dialog to be shown to user
-        dialogFragment.show(getFragmentManager(), "clearFavorites");
-    }
-
     //TODO: this should make the current favorites be erased
     //this is from the clearFavoritesDialogListener interface
-    public void onPositiveClick(){
+    public void onPositiveClick() {
         Toast.makeText(this, "Not Yet Implemented", Toast.LENGTH_LONG).show();
     }
 
     @SuppressLint("StaticFieldLeak")
-    public void getFavoritesByID(final String queryName) {
+    public void getFavoritesByID(final List<String> queryID) {
         new AsyncTask<Void, Void, List<Characters>>() {
 
             @Override
             public List<Characters> doInBackground(Void... params) {
+                List<Characters> characters = new ArrayList<>();
 
-                String queryParam = queryName;
-                StringBuilder buffedUp = new StringBuilder();
-                String[] parts = queryName.split(" ");
-                int length = parts.length;
-                if (length > 1) {
-                    for (int i = 0; i < length - 1; i++) {
-                        buffedUp.append(parts[i] + "_");
+                List<String> queryParams = new ArrayList<>();
+                for (int i = 0; i < queryID.size(); i++) {
+                    StringBuilder buffedUp = new StringBuilder();
+                    String[] parts = queryID.get(i).split(" ");
+                    int length = parts.length;
+                    if (length > 1) {
+                        for (int j = 0; j < length - 1; i++) {
+                            buffedUp.append(parts[i] + "_");
+                        }
+                        buffedUp.append(parts[length - 1]);
+                        queryParams.add(buffedUp.toString());
                     }
-                    buffedUp.append(parts[length - 1]);
-                    queryParam = buffedUp.toString();
                 }
 
-                String filter = "&filter=name%3A" + queryParam + "&format=JSON";
-                String sURL = baseURL + "characters" + apiKey + filter;
-
-                List<Characters> characters = null;
-
-                try {
-                    URL url;
-                    HttpURLConnection urlConnection;
+                for (int i = 0; i < queryParams.size(); i++) {
+                    String filter = "&filter=id%3A" + queryParams.get(i) + "&format=JSON";
+                    String sURL = baseURL + "characters" + apiKey + filter;
 
                     try {
-                        url = new URL(sURL);
-                        urlConnection = (HttpURLConnection) url.openConnection();
-                    } catch (IOException e) {
-                        Log.e(TAG, "Error opening connection for site: " + e.getMessage());
-                        return null;
-                    }
+                        URL url;
+                        HttpURLConnection urlConnection;
 
-                    try {
-                        BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                        characters = parseResponse(in);
-                    } catch (IOException e) {
-                        Log.e(TAG, "Error reading response from site: " + e.getMessage());
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Malformed JSON returned from site: " + e.getMessage());
-                    } finally {
-                        urlConnection.disconnect();
+                        try {
+                            url = new URL(sURL);
+                            urlConnection = (HttpURLConnection) url.openConnection();
+                        } catch (IOException e) {
+                            Log.e(TAG, "Error opening connection for site: " + e.getMessage());
+                            return null;
+                        }
+
+                        try {
+                            BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                            characters.add(parseResponse(in));
+                        } catch (IOException e) {
+                            Log.e(TAG, "Error reading response from site: " + e.getMessage());
+                        } catch (JSONException e) {
+                            Log.e(TAG, "Malformed JSON returned from site: " + e.getMessage());
+                        } finally {
+                            urlConnection.disconnect();
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error trying to traverse que" +
+                                "ry results: " + e.getMessage());
                     }
-                } catch (Exception e) {
-                    Log.e(TAG, "Error trying to traverse que" +
-                            "ry results: " + e.getMessage());
                 }
+
                 return characters;
             }
 
             @Override
             public void onPostExecute(List<Characters> characters) {
                 searchResults = characters;
-                onCreateArrayAdapter();
             }
         }.execute();
     }
 
-    private static List<Characters> parseResponse(BufferedReader in) throws IOException, JSONException {
+    private static Characters parseResponse(BufferedReader in) throws IOException, JSONException {
         StringBuilder response = new StringBuilder(2048);
         String line;
         while ((line = in.readLine()) != null) {
@@ -252,16 +260,9 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
 
         if (arrayResult != null) {
             Gson gson = new Gson();
-            List<Characters> queryResult = new ArrayList<>();
-            for (int i = 0; i < arrayResult.length(); i++) {
-                String result = arrayResult.get(i).toString();
-                Characters characterInfo = gson.fromJson(result, Characters.class);
-                queryResult.add(characterInfo);
-            }
-
-            return queryResult;
+            String result = arrayResult.get(0).toString();
+            return gson.fromJson(result, Characters.class);
         }
-
         return null;
     }
 
@@ -277,13 +278,14 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
             this.data = objects;
         }
 
-        @Override @NonNull
-        public View getView(int position, View convertView, @NonNull ViewGroup parent){
+        @Override
+        @NonNull
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             View row = convertView;
             CharacterAdapter.InfoHolder holder = null;
             final int location = position;
 
-            if (row == null){
+            if (row == null) {
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
                 row = inflater.inflate(layoutResourceId, parent, false);
 
@@ -309,7 +311,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
 
             Picasso.get()
                     .load(imageUrl)
-                    .resize(200,200)
+                    .resize(200, 200)
                     .into(holder.image);
             holder.name.setText(item.getName());
             holder.publisher.setText(publisherName);
