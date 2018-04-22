@@ -1,6 +1,5 @@
 package edu.psu.gsa5054.comicvine;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -27,11 +26,9 @@ public class FavoriteDB extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS FAVORITE";
 
     private static FavoriteDB faveDb;
-    private Context appContext;
 
     private FavoriteDB(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        appContext = context.getApplicationContext();
     }
 
     public static synchronized FavoriteDB getInstance(Context context) {
@@ -44,20 +41,6 @@ public class FavoriteDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_FAVORITE);
-
-        // No information to populate tables
-        // TODO: Not fully connected to ComicVine API yet
-
-        db.beginTransaction();
-        ContentValues values = new ContentValues();
-//        ...
-        //values.put("UID", "test"/*string value*/);
-//        ...
-        //db.insert(/*table name*/"user", null, values);
-//        ...
-        db.setTransactionSuccessful();
-        db.endTransaction();
-
     }
 
     @Override
