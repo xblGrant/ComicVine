@@ -1,6 +1,5 @@
 package edu.psu.gsa5054.comicvine;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;

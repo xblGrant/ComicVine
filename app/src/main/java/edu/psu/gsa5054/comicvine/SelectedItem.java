@@ -2,6 +2,7 @@ package edu.psu.gsa5054.comicvine;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -86,13 +87,19 @@ public class SelectedItem extends AppCompatActivity {
 
     private void addToFavorites() {
         if (dbReady){
-            db.beginTransaction();
-            ContentValues values = new ContentValues();
-            values.put("CharacterID", characterID/*string value*/);
-            values.put("UID", mAuth.getUid());
-            db.insert(/*table name*/"FAVORITE", null, values);
-            db.setTransactionSuccessful();
-            db.endTransaction();
+            try {
+                db.beginTransaction();
+                ContentValues values = new ContentValues();
+                values.put("CharacterID", characterID/*string value*/);
+                values.put("UID", mAuth.getUid());
+                db.insertOrThrow(/*table name*/"FAVORITE", null, values);
+                db.setTransactionSuccessful();
+                db.endTransaction();
+
+                Toast.makeText(SelectedItem.this, "Added to Favorites", Toast.LENGTH_LONG).show();
+            } catch (SQLiteConstraintException e){
+                Toast.makeText(SelectedItem.this, "Already Favorited", Toast.LENGTH_LONG).show();
+            }
         }
         else {
             Toast.makeText(SelectedItem.this, "Try again shortly", Toast.LENGTH_LONG).show();

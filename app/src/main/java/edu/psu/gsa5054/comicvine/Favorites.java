@@ -48,6 +48,7 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
     private SQLiteDatabase db;
     private List<Characters> searchResults;
     private ArrayAdapter<Characters> arrayAdapter;
+    private AsyncTask getFavoriteDataAsyncTask;
     private static final String TAG = "Favorites";
     private static final String baseURL = "https://comicvine.gamespot.com/api/";
     private static final String apiKey = "/?api_key=1b933662d46319e7bb1085f8a60f5a11519cc4f0";
@@ -100,8 +101,10 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
     @SuppressLint("StaticFieldLeak")
     private void getFavoritesData() {
 
-        // TODO: get favorites information.
-        new AsyncTask<Void, Void, ArrayList<String>>() {
+        if (getFavoriteDataAsyncTask != null && getFavoriteDataAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING))
+            getFavoriteDataAsyncTask.cancel(true);
+
+        getFavoriteDataAsyncTask = new AsyncTask<Void, Void, ArrayList<String>>() {
             String userID;
 
             @Override
@@ -116,6 +119,9 @@ public class Favorites extends AppCompatActivity implements clearFavoritesDialog
 
                 try {
                     while (c.moveToNext()) {
+                        if (isCancelled())
+                            break;
+
                         characterIDs.add(c.getString(c.getColumnIndex("CharacterID")));
                     }
                 } finally {
