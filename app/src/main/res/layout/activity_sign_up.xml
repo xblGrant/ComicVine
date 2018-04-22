@@ -50,6 +50,7 @@
 
     <EditText
         android:id="@+id/password2"
+        style="@style/?android:attr/buttonBarButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -58,7 +59,6 @@
         android:ems="10"
         android:hint="@string/Password_hint"
         android:inputType="textPassword"
-        style="?android:attr/buttonBarButtonStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
